@@ -8,5 +8,5 @@ import Tr
 
 -- | Main - parse args, and read from stdin.
 main :: IO ()
-main = putStrLn $ tr "" (Just "") ""
+main = putStrLn $ tr "eoh" (Just "oet") "helleoo"
 

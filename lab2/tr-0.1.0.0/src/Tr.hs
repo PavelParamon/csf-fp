@@ -1,15 +1,14 @@
--- | Haskell tr implementation. Just supports the swap and delete modes:
--- * tr string1 string2
--- * tr -d string1
---
--- PLEASE DON'T CHANGE THE INTERFACE OF THIS FILE AS WE WILL EXPECT IT TO BE
--- THE SAME WHEN TESTING!
+{-# OPTIONS_GHC -Wno-deferred-type-errors #-}
+{-# OPTIONS_GHC -Wno-incomplete-patterns #-}
+{-# OPTIONS_GHC -Wno-name-shadowing #-}
+{-# OPTIONS_GHC -Wno-missing-signatures #-}
+{-# OPTIONS_GHC -Wno-unused-matches #-}
+{-# OPTIONS_GHC -Wno-unused-top-binds #-}
 module Tr
     ( CharSet
     , tr
     ) where
 
--- | Just to give `tr` a more descriptive type
 type CharSet = String
 
 -- | 'tr' - the characters in the first argument are translated into characters
@@ -30,6 +29,36 @@ type CharSet = String
 --
 -- It's up to you how to handle the first argument being the empty string, or
 -- the second argument being `Just ""`, we will not be testing this edge case.
+isElement :: Char -> CharSet -> Bool 
+isElement a [] = False
+isElement a (x:xs)
+    | a == x = True
+    | otherwise = isElement a xs
+
+addChar :: CharSet -> CharSet -> Char -> Char 
+addChar (inChar:inset) (outChar:outset) x 
+    | x == inChar = outChar
+    | otherwise = addChar inset outset x     
+
+replace :: CharSet -> CharSet -> String -> String
+replace _ _ [] = []
+replace inset outset (x:xs) = 
+    if x `isElement` inset  then
+        if length outset == length inset then addChar inset outset x : replace inset outset xs
+        else head outset : replace inset outset xs
+    else x : replace inset outset xs
+
+delete :: CharSet -> String -> String
+delete _ [] = []
+delete inset (x:xs) = 
+    if x `isElement` inset then delete inset xs
+    else x : delete inset xs
+
 tr :: CharSet -> Maybe CharSet -> String -> String
-tr _inset _outset xs = xs
+tr [] (Just []) xs = xs
+tr _inset _outset xs = 
+    case _outset of
+        Just outset -> replace _inset outset xs
+        Nothing -> delete _inset xs 
+
 
