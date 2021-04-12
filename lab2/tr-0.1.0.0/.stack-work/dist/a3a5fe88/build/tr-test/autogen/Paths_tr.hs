@@ -29,12 +29,12 @@ version :: Version
 version = Version [0,1,0,0] []
 bindir, libdir, dynlibdir, datadir, libexecdir, sysconfdir :: FilePath
 
-bindir     = "C:\\Users\\Pave_\\Desktop\\tr-0.1.0.0\\.stack-work\\install\\0d2ba305\\bin"
-libdir     = "C:\\Users\\Pave_\\Desktop\\tr-0.1.0.0\\.stack-work\\install\\0d2ba305\\lib\\x86_64-windows-ghc-8.10.2\\tr-0.1.0.0-KmYzAmf3RV6Gx3ftQjrj4o-tr-test"
-dynlibdir  = "C:\\Users\\Pave_\\Desktop\\tr-0.1.0.0\\.stack-work\\install\\0d2ba305\\lib\\x86_64-windows-ghc-8.10.2"
-datadir    = "C:\\Users\\Pave_\\Desktop\\tr-0.1.0.0\\.stack-work\\install\\0d2ba305\\share\\x86_64-windows-ghc-8.10.2\\tr-0.1.0.0"
-libexecdir = "C:\\Users\\Pave_\\Desktop\\tr-0.1.0.0\\.stack-work\\install\\0d2ba305\\libexec\\x86_64-windows-ghc-8.10.2\\tr-0.1.0.0"
-sysconfdir = "C:\\Users\\Pave_\\Desktop\\tr-0.1.0.0\\.stack-work\\install\\0d2ba305\\etc"
+bindir     = "C:\\Users\\Pave_\\tr-0.1.0.0\\.stack-work\\install\\0d2ba305\\bin"
+libdir     = "C:\\Users\\Pave_\\tr-0.1.0.0\\.stack-work\\install\\0d2ba305\\lib\\x86_64-windows-ghc-8.10.2\\tr-0.1.0.0-KmYzAmf3RV6Gx3ftQjrj4o-tr-test"
+dynlibdir  = "C:\\Users\\Pave_\\tr-0.1.0.0\\.stack-work\\install\\0d2ba305\\lib\\x86_64-windows-ghc-8.10.2"
+datadir    = "C:\\Users\\Pave_\\tr-0.1.0.0\\.stack-work\\install\\0d2ba305\\share\\x86_64-windows-ghc-8.10.2\\tr-0.1.0.0"
+libexecdir = "C:\\Users\\Pave_\\tr-0.1.0.0\\.stack-work\\install\\0d2ba305\\libexec\\x86_64-windows-ghc-8.10.2\\tr-0.1.0.0"
+sysconfdir = "C:\\Users\\Pave_\\tr-0.1.0.0\\.stack-work\\install\\0d2ba305\\etc"
 
 getBinDir, getLibDir, getDynLibDir, getDataDir, getLibexecDir, getSysconfDir :: IO FilePath
 getBinDir = catchIO (getEnv "tr_bindir") (\_ -> return bindir)

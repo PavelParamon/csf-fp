@@ -4,6 +4,7 @@
 {-# OPTIONS_GHC -Wno-missing-signatures #-}
 {-# OPTIONS_GHC -Wno-unused-matches #-}
 {-# OPTIONS_GHC -Wno-unused-top-binds #-}
+{-# OPTIONS_GHC -Wno-overlapping-patterns #-}
 module Tr
     ( CharSet
     , tr
@@ -41,24 +42,30 @@ addChar (inChar:inset) (outChar:outset) x
     | otherwise = addChar inset outset x     
 
 replace :: CharSet -> CharSet -> String -> String
-replace _ _ [] = []
-replace inset outset (x:xs) = 
-    if x `isElement` inset  then
-        if length outset == length inset then addChar inset outset x : replace inset outset xs
-        else head outset : replace inset outset xs
-    else x : replace inset outset xs
+replace inset outset xs = reverse $ replaceHelp inset outset xs []
+    where
+        replaceHelp _ _ [] acc = acc
+        replaceHelp inset outset (x:xs) acc =
+            if x `isElement` inset  then
+                if length outset == length inset then replaceHelp inset outset xs (addChar inset outset x : acc)
+                    else replaceHelp inset outset xs (head outset : acc)
+            else replaceHelp inset outset xs (x : acc)
 
 delete :: CharSet -> String -> String
 delete _ [] = []
-delete inset (x:xs) = 
-    if x `isElement` inset then delete inset xs
-    else x : delete inset xs
+delete inset xs = reverse $ deleteHelp inset xs []
+    where
+        deleteHelp _ [] acc = acc
+        deleteHelp inset (x:xs) acc =
+            if x `isElement` inset then deleteHelp inset xs acc
+            else deleteHelp inset xs (x:acc)
 
 tr :: CharSet -> Maybe CharSet -> String -> String
-tr [] (Just []) xs = xs
 tr _inset _outset xs = 
     case _outset of
-        Just outset -> replace _inset outset xs
-        Nothing -> delete _inset xs 
+        Just outset -> 
+            if outset == "" then xs
+                else replace _inset outset xs
+        Nothing -> delete _inset xs
 
 

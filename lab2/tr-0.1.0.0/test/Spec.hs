@@ -21,6 +21,10 @@ trDel inset = tr inset Nothing
 -- | Test harness.
 main :: IO ()
 main = hspec $ describe "Testing tr" $ do
+    describe "hello" $
+      it "hello -> holle" $
+        tr' "eo" "oe" "hello" `shouldBe` "holle"
+
     describe "single translate" $
       it "a -> b" $
         tr' "a" "b" "a" `shouldBe` "b"
@@ -29,21 +33,33 @@ main = hspec $ describe "Testing tr" $ do
       it "a -> b" $
         tr' "a" "b" "aaaa" `shouldBe` "bbbb"
 
-    describe "extend input set" $
+    describe "inset > outset" $
       it "abc -> d" $
         tr' "abc" "d" "abcd" `shouldBe` "dddd"
+    
+    describe "inset < outset" $
+      it "atca -> bbbtcbbb" $
+        tr' "a" "bbb" "atca" `shouldBe` "btcb"
 
-    describe "hello" $
-      it "hello -> holle" $
-        tr' "eo" "oe" "hello" `shouldBe` "holle"
+    describe "inset is null" $
+      it "abra -> abra" $
+        tr' "" "aa" "abra" `shouldBe` "abra"
 
-    describe "my test1" $
-      it "helleoo -> tolloee" $
-        tr' "eoh" "oet" "helleoo" `shouldBe` "tolloee"
+    describe "outset is null" $
+      it "abra -> abra" $
+        tr' "aa" "" "abra" `shouldBe` "abra" 
 
-    describe "my test2" $
-      it "text -> FevF" $
-        tr' "xt" "vF" "text" `shouldBe` "FevF" 
+    describe "str null" $
+      it "->" $
+        tr' "aa" "ab" "" `shouldBe` "" 
+
+    describe "outset and inset null" $
+      it "abra->abra" $
+        tr' "" "" "abra" `shouldBe` "abra"
+
+    describe "all null" $
+      it "->" $
+        tr' "" "" "" `shouldBe` ""                        
     
     describe "delete1" $
       it "hello -> hllo" $
@@ -51,11 +67,19 @@ main = hspec $ describe "Testing tr" $ do
 
     describe "delete all" $
       it "hello -> " $
-        trDel "helo" "hello" `shouldBe` "" 
+        trDel "helo" "hello" `shouldBe` ""
 
-    describe "delete3" $
-      it "hello -> ho" $
-        trDel "le" "hello" `shouldBe` "ho"          
+    describe "delete inset null" $
+      it "hello -> hello" $
+        trDel "" "hello" `shouldBe` "hello" 
+
+    describe "delete str null" $
+      it "->" $
+        trDel "ah" "" `shouldBe` "" 
+
+    describe "delete all null" $
+      it "->" $
+        trDel "" "" `shouldBe` ""                       
 
     describe "tr quick-check" $
       it "empty input is identity" $ property prop_empty_id
